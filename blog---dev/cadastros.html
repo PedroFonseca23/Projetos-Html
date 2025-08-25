@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Cadastros</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Fira+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(120deg, #e3f0ff 0%, #f5f7fa 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Montserrat', Arial, sans-serif;
+        }
+        .container {
+            background: #fff;
+            padding: 36px 28px 28px 28px;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 320px;
+            max-width: 98vw;
+            width: 420px;
+            animation: fadeIn 0.7s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.97);}
+            to   { opacity: 1; transform: scale(1);}
+        }
+        h1 {
+            color: #007bff;
+            margin-bottom: 18px;
+            font-size: 2em;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        #btnVoltar {
+            margin-bottom: 18px;
+            padding: 10px 28px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+            color: #fff;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.09);
+            transition: background 0.2s, transform 0.15s;
+            letter-spacing: 1px;
+        }
+        #btnVoltar:hover {
+            background: linear-gradient(90deg, #0056b3 60%, #003e80 100%);
+            transform: scale(1.04);
+        }
+        .search-bar {
+            display: flex;
+            align-items: stretch; /* Garante altura igual */
+            justify-content: center; /* Centraliza horizontalmente */
+            margin-bottom: 22px;
+            width: 100%;
+            max-width: 400px;
+            gap: 0;
+            box-sizing: border-box;
+        }
+        #pesquisaNome, #pesquisaCpf {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 8px 0 0 8px;
+            border: 1.5px solid #b0c4de;
+            font-size: 1em;
+            background: #f7fbff;
+            transition: border 0.2s;
+            font-family: 'Montserrat', Arial, sans-serif;
+            margin-right: 0;
+            border-right: none;
+            box-sizing: border-box;
+            min-width: 0;
+        }
+        #pesquisaCpf {
+            border-radius: 0 8px 8px 0;
+            border-left: none;
+            margin-right: 8px;
+        }
+        #pesquisaNome:focus, #pesquisaCpf:focus {
+            outline: none;
+            border: 1.5px solid #007bff;
+            background: #e3f0ff;
+        }
+        #btnPesquisar {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+            color: #fff;
+            font-size: 1.08em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            margin-left: 0;
+            min-width: 48px;
+            min-height: 44px;
+            box-sizing: border-box;
+            align-self: stretch;
+        }
+        #btnPesquisar:hover {
+            background: linear-gradient(90deg, #0056b3 60%, #003e80 100%);
+            transform: scale(1.07);
+        }
+        ul#lista {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            max-width: 400px;
+        }
+        ul#lista li {
+            background: #e3f0ff;
+            margin-bottom: 12px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.07);
+            font-size: 1.08em;
+            color: #1a237e;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            letter-spacing: 1px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            transition: background 0.2s, box-shadow 0.2s;
+            border-left: 4px solid #007bff;
+            cursor: pointer;
+        }
+        ul#lista li:hover {
+            background: #d0e6ff;
+            box-shadow: 0 4px 16px rgba(0,123,255,0.13);
+            border-left: 4px solid #0056b3;
+        }
+        ul#lista li strong {
+            color: #0056b3;
+            font-weight: 700;
+        }
+        /* Modal de detalhes */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.25);
+            z-index: 1100;
+            opacity: 0;
+            transition: opacity 0.35s;
+        }
+        .modal-overlay.ativo {
+            display: block;
+            opacity: 1;
+        }
+        .modal-detalhes {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.97);
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            padding: 28px 18px 18px 18px;
+            min-width: 300px;
+            max-width: 90vw;
+            z-index: 1200;
+            opacity: 0;
+            transition: opacity 0.35s, transform 0.35s;
+            text-align: center;
+        }
+        .modal-detalhes.ativo {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .modal-detalhes h2 {
+            color: #007bff;
+            margin-top: 0;
+            margin-bottom: 18px;
+            font-size: 1.25em;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .detalhe-camada {
+            background: #e3f0ff;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.08);
+            font-size: 1em;
+            color: #1a237e;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            letter-spacing: 1px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            align-items: flex-start;
+        }
+        .detalhe-camada strong {
+            color: #0056b3;
+            font-size: 1em;
+            margin-bottom: 2px;
+        }
+        .detalhe-camada hr {
+            width: 100%;
+            border: none;
+            border-top: 1.2px solid #b0c4de;
+            margin: 4px 0 8px 0;
+        }
+        .modal-detalhes button {
+            margin-top: 12px;
+            padding: 10px 28px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+            color: #fff;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.09);
+            letter-spacing: 1px;
+        }
+        .modal-detalhes button:hover {
+            background: linear-gradient(90deg, #0056b3 60%, #003e80 100%);
+            transform: scale(1.05);
+        }
+        .modal-detalhes input[type="text"] {
+            width: 100%;
+            font-family: 'Fira Mono', Consolas, monospace;
+            font-size: 1em;
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1.2px solid #b0c4de;
+            background: #f7fbff;
+            margin-top: 2px;
+            margin-bottom: 2px;
+            transition: border 0.2s;
+        }
+        .modal-detalhes input[type="text"]:focus {
+            outline: none;
+            border: 1.2px solid #007bff;
+            background: #e3f0ff;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px 2vw 10px 2vw;
+                min-width: unset;
+                width: 98vw;
+            }
+            .search-bar {
+                flex-direction: column;
+                gap: 8px;
+                max-width: 98vw;
+                align-items: stretch;
+            }
+            #pesquisaNome, #pesquisaCpf {
+                border-radius: 8px;
+                border: 1.5px solid #b0c4de;
+                margin-right: 0;
+                border-right: 1.5px solid #b0c4de;
+                border-left: 1.5px solid #b0c4de;
+                width: 100%;
+            }
+            #btnPesquisar {
+                width: 100%;
+                margin-left: 0;
+                min-height: 44px;
+            }
+            .modal-detalhes {
+                min-width: unset;
+                padding: 12px 4vw 12px 4vw;
+            }
+            .detalhe-camada {
+                padding: 8px 4vw;
+                font-size: 0.97em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="btnVoltar">Voltar</button>
+        <h1>Lista de Cadastros</h1>
+        <div class="search-bar">
+            <input type="text" id="pesquisaNome" placeholder="Pesquisar por nome...">
+            <input type="text" id="pesquisaCpf" placeholder="Pesquisar por CPF...">
+            <button id="btnPesquisar">🔍</button>
+        </div>
+        <ul id="lista"></ul>
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-detalhes" id="modalDetalhes">
+            <h2>Detalhes do Cadastro</h2>
+            <form id="formEditar" autocomplete="off" onsubmit="return false;">
+                <div class="detalhe-camada">
+                    <strong>Nome</strong>
+                    <hr>
+                    <input type="text" id="editNome">
+                </div>
+                <div class="detalhe-camada">
+                    <strong>CPF</strong>
+                    <hr>
+                    <input type="text" id="editCpf">
+                </div>
+                <div class="detalhe-camada">
+                    <strong>Senha</strong>
+                    <hr>
+                    <input type="text" id="editSenha">
+                </div>
+                <button type="button" id="salvarEdicao" style="margin-right:12px;">Salvar</button>
+                <button type="button" id="fecharModal">Fechar</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Botão voltar
+        document.getElementById('btnVoltar').onclick = function() {
+            if (document.referrer) {
+                window.location.href = document.referrer;
+            } else {
+                window.history.back();
+            }
+        };
+
+        let indiceEdicao = null;
+
+        function normalizarCpf(str) {
+            return (str || '').replace(/\D/g, '');
+        }
+
+        // Mostra a lista
+        function mostrarLista() {
+            const lista = document.getElementById('lista');
+            const cadastros = JSON.parse(localStorage.getItem('cadastros') || '[]');
+            lista.innerHTML = '';
+
+            const filtroNome = (document.getElementById('pesquisaNome')?.value || '').toLowerCase();
+            const filtroCpf = (document.getElementById('pesquisaCpf')?.value.replace(/\D/g, '') || '');
+
+            cadastros.forEach((item, index) => { // Adicionado 'index' para usar no onclick
+                // Adicionado para não mostrar admin
+                if (item.senha === "admin1234") {
+                    return;
+                }
+
+                const nomeOk = !filtroNome || (item.usuario && item.usuario.toLowerCase().includes(filtroNome));
+                const cpfOk = !filtroCpf || (item.cpf && normalizarCpf(item.cpf).includes(filtroCpf));
+                if (nomeOk && cpfOk) {
+                    const textoNome = `<strong>Nome:</strong> ${item.usuario || ''}`;
+                    const textoCpf = `<strong>CPF:</strong> ${item.cpf || ''}`;
+                    const textoSenha = `<strong>Senha:</strong> ${item.senha || ''}`;
+                    const li = document.createElement('li');
+                    li.innerHTML = `${textoNome}<span>${textoCpf}</span><span>${textoSenha}</span>`;
+                    li.onclick = function() {
+                        // Passa o 'item' e o 'index' da lista original
+                        mostrarDetalhes(item, buscarIndice(item)); 
+                    };
+                    lista.appendChild(li);
+                }
+            });
+        }
+
+        // Função para formatar CPF
+        function formatarCPF(cpf) {
+            cpf = (cpf || '').replace(/\D/g, '').slice(0, 11);
+            if (cpf.length === 11) {
+                return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+            }
+            return cpf;
+        }
+
+        // Máscara automática para o campo de CPF no modal
+        document.getElementById('editCpf').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '').slice(0, 11);
+            if (value.length > 9) {
+                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, "$1.$2.$3-$4");
+            } else if (value.length > 6) {
+                value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, "$1.$2.$3");
+            } else if (value.length > 3) {
+                value = value.replace(/(\d{3})(\d{1,3})/, "$1.$2");
+            }
+            e.target.value = value;
+        });
+
+        // Mostra detalhes em camadas no modal
+        function mostrarDetalhes(item, index) {
+            document.getElementById('editNome').value = item.usuario || '';
+            document.getElementById('editCpf').value = formatarCPF(item.cpf || '');
+            document.getElementById('editSenha').value = item.senha || '';
+            indiceEdicao = index; // Usa o índice recebido
+            const overlay = document.getElementById('modalOverlay');
+            const modal = document.getElementById('modalDetalhes');
+            overlay.style.display = 'block';
+            modal.style.display = 'block';
+            // Força reflow para garantir a transição
+            void modal.offsetWidth;
+            void overlay.offsetWidth;
+            overlay.classList.add('ativo');
+            modal.classList.add('ativo');
+        }
+
+        // Busca o índice real do item na lista completa do localStorage
+        function buscarIndice(item) {
+            const cadastros = JSON.parse(localStorage.getItem('cadastros') || '[]');
+            return cadastros.findIndex(c =>
+                c.usuario === item.usuario &&
+                c.cpf === item.cpf &&
+                c.senha === item.senha
+            );
+        }
+
+        document.getElementById('salvarEdicao').onclick = function() {
+            const cadastros = JSON.parse(localStorage.getItem('cadastros') || '[]');
+            if (indiceEdicao !== null && cadastros[indiceEdicao]) {
+                cadastros[indiceEdicao].usuario = document.getElementById('editNome').value;
+                cadastros[indiceEdicao].cpf = document.getElementById('editCpf').value;
+                cadastros[indiceEdicao].senha = document.getElementById('editSenha').value;
+                localStorage.setItem('cadastros', JSON.stringify(cadastros));
+                mostrarLista();
+                fecharModal();
+            }
+        };
+
+        // Fecha o modal de detalhes
+        document.getElementById('fecharModal').onclick = fecharModal;
+        document.getElementById('modalOverlay').onclick = fecharModal;
+        function fecharModal() {
+            const overlay = document.getElementById('modalOverlay');
+            const modal = document.getElementById('modalDetalhes');
+            modal.classList.remove('ativo');
+            overlay.classList.remove('ativo');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                overlay.style.display = 'none';
+            }, 350);
+        }
+
+        // Eventos para pesquisa em tempo real:
+        document.getElementById('pesquisaNome').addEventListener('input', mostrarLista);
+        document.getElementById('pesquisaCpf').addEventListener('input', mostrarLista);
+        document.getElementById('btnPesquisar').addEventListener('click', mostrarLista);
+
+        // Mostra a lista inicial assim que a página carregar
+        mostrarLista();
+    </script>
+</body>
+</html>

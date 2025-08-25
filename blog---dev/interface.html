@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGP Feed</title>
+    <style>
+        :root {
+            --cor-fundo: #1a1a1d; /* Cinza quase preto */
+            --cor-cartao: rgba(44, 44, 52, 0.75); /* Cinza escuro com transparência */
+            --cor-destaque: #4a90e2; /* Azul escuro/médio */
+            --cor-texto-principal: #f0f2f5;
+            --cor-texto-secundario: #b0b3b8;
+            --cor-borda: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-principal);
+        }
+
+        header {
+            background: var(--cor-cartao);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-bottom: 1px solid var(--cor-borda);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .profile-info { display: flex; align-items: center; gap: 12px; }
+        .profile-icon {
+            width: 40px; height: 40px; background-color: var(--cor-destaque);
+            color: white; border-radius: 50%; display: flex;
+            justify-content: center; align-items: center; font-weight: bold; font-size: 1.2em;
+        }
+        .username-display { font-weight: bold; }
+        .menu-icon { font-size: 28px; cursor: pointer; padding: 5px; }
+        
+        /* --- ESTILO DO MENU LATERAL E OVERLAY --- */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -280px; /* Começa escondido fora da tela */
+            width: 250px;
+            height: 100%;
+            background: #1c1c20;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+            transition: right 0.3s ease-in-out;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .side-menu.active {
+            right: 0; /* Mostra o menu */
+        }
+        .side-menu a {
+            color: var(--cor-texto-principal);
+            text-decoration: none;
+            padding: 15px 10px;
+            font-size: 1.1em;
+            border-radius: 8px;
+        }
+        .side-menu a:hover {
+            background-color: var(--cor-destaque);
+        }
+#logout-btn {
+    background-color: var(--cor-destaque);
+    color: white;
+    text-align: center;
+    margin-top: auto; /* Mantém o botão na parte inferior */
+    margin-bottom: 25px; /* Adiciona um respiro na parte de baixo */
+}
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 199;
+        }
+        .overlay.active {
+            display: block;
+        }
+
+        main { padding: 20px; max-width: 600px; margin: 0 auto; }
+        
+        /* O resto do CSS para o formulário e publicações continua o mesmo */
+        .add-post-form {
+            background-color: var(--cor-cartao); padding: 25px; border-radius: 12px;
+            border: 1px solid var(--cor-borda); margin-bottom: 30px;
+        }
+        .add-post-form h2 {
+            margin-top: 0; font-size: 1.3em; color: var(--cor-destaque);
+            text-align: center; margin-bottom: 20px;
+        }
+        .file-input-wrapper {
+            position: relative; border: 2px dashed var(--cor-borda); border-radius: 8px;
+            padding: 30px; text-align: center; cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .file-input-wrapper:hover { background-color: rgba(74, 144, 226, 0.1); border-color: var(--cor-destaque); }
+        .file-input-wrapper input[type="file"] { position: absolute; top:0; left:0; width:100%; height:100%; opacity: 0; cursor: pointer; }
+        .file-input-label { color: var(--cor-texto-secundario); }
+        #image-preview { display: none; max-width: 100%; max-height: 200px; border-radius: 8px; margin-top: 15px; }
+        #post-caption {
+            width: 100%; background-color: var(--cor-fundo); border: 1px solid var(--cor-borda);
+            border-radius: 8px; color: var(--cor-texto-principal); font-family: inherit;
+            font-size: 1em; padding: 12px; margin-top: 20px;
+            resize: vertical; min-height: 60px; box-sizing: border-box;
+        }
+        #post-caption:focus { outline: none; border-color: var(--cor-destaque); }
+        .add-post-form button { background-color: var(--cor-destaque); color: white; padding: 12px 15px; border: none; border-radius: 8px; cursor: pointer; width: 100%; font-size: 1em; font-weight: bold; margin-top: 20px; }
+        .post-card { background-color: var(--cor-cartao); border: 1px solid var(--cor-borda); border-radius: 12px; margin-bottom: 20px; }
+        .post-header { display: flex; align-items: center; padding: 12px 15px; gap: 10px; }
+        .post-header .profile-icon { width: 32px; height: 32px; font-size: 1em; }
+        .post-header .username-display { font-size: 0.9em; }
+        .post-image img { width: 100%; height: auto; max-height: 70vh; object-fit: cover; }
+        .post-caption { padding: 12px 15px; }
+        .post-caption strong { color: var(--cor-destaque); }
+        .post-actions { padding: 8px 15px; display: flex; align-items: center; gap: 20px; font-size: 24px; }
+        .post-actions .icon { cursor: pointer; transition: transform 0.2s; }
+        .post-actions .icon:hover { transform: scale(1.15); }
+        .post-actions .icon.liked { color: var(--cor-destaque); }
+        .post-stats { padding: 0 15px 10px; font-size: 0.9em; color: var(--cor-texto-secundario); }
+        .post-comments { padding: 0 15px 15px; font-size: 0.9em; }
+        .comment { margin-top: 5px; }
+        .comment strong { color: var(--cor-destaque); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="profile-info">
+            <div class="profile-icon" id="user-initial"></div>
+            <span class="username-display" id="username"></span>
+        </div>
+        <div class="menu-icon" id="menu-btn">&#9776;</div>
+    </header>
+    
+    <div class="overlay" id="overlay"></div>
+    <nav class="side-menu" id="side-menu">
+        <a href="#" id="logout-btn">Terminar Sessão</a>
+    </nav>
+
+    <main>
+        <div class="add-post-form">
+             <h2>Criar Publicação</h2>
+            <form id="newPostForm">
+                <div class="file-input-wrapper">
+                    <span class="file-input-label">Clique para selecionar uma imagem</span>
+                    <input type="file" id="imageFile" accept="image/*" required>
+                </div>
+                <img id="image-preview" src="#" alt="Pré-visualização da imagem">
+                <textarea id="post-caption" placeholder="Escreva uma legenda..."></textarea>
+                <button type="submit">Publicar</button>
+            </form>
+        </div>
+        <div id="posts-container"></div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+            if (!loggedInUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Elementos da UI
+            const userInitial = document.getElementById('user-initial');
+            const username = document.getElementById('username');
+            const menuBtn = document.getElementById('menu-btn');
+            const sideMenu = document.getElementById('side-menu');
+            const overlay = document.getElementById('overlay');
+            const logoutBtn = document.getElementById('logout-btn');
+            
+            userInitial.textContent = loggedInUser.charAt(0).toUpperCase();
+            username.textContent = loggedInUser;
+
+            // --- FUNCIONALIDADE DO MENU RESTAURADA ---
+            function toggleMenu() {
+                sideMenu.classList.toggle('active');
+                overlay.classList.toggle('active');
+            }
+            menuBtn.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+
+            logoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                sessionStorage.removeItem('loggedInUser');
+                window.location.href = 'index.html';
+            });
+            
+            // Toda a sua lógica de publicações, gostos e comentários continua aqui
+            // (O código foi omitido para não ser repetitivo, mas ele deve estar aqui)
+            const newPostForm = document.getElementById('newPostForm');
+            const postsContainer = document.getElementById('posts-container');
+            const imageFileInput = document.getElementById('imageFile');
+            const imagePreview = document.getElementById('image-preview');
+            const fileInputLabel = document.querySelector('.file-input-label');
+
+            imageFileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                        fileInputLabel.textContent = imageFileInput.files[0].name;
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+
+            newPostForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const file = imageFileInput.files[0];
+                const caption = document.getElementById('post-caption').value;
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = function() {
+                        let posts = JSON.parse(localStorage.getItem('posts') || '[]');
+                        const newPost = {
+                            id: Date.now(),
+                            user: loggedInUser,
+                            imageUrl: reader.result,
+                            caption: caption,
+                            likes: [],
+                            comments: []
+                        };
+                        posts.push(newPost);
+                        localStorage.setItem('posts', JSON.stringify(posts));
+                        newPostForm.reset();
+                        imagePreview.style.display = 'none';
+                        fileInputLabel.textContent = 'Clique para selecionar uma imagem';
+                        renderPosts();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            function renderPosts() {
+                const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+                postsContainer.innerHTML = '';
+                if (posts.length === 0) {
+                    postsContainer.innerHTML = '<div class="no-posts-message">Ainda não há publicações. Seja o primeiro!</div>';
+                    return;
+                }
+                posts.slice().reverse().forEach(post => {
+                    const postCard = document.createElement('div');
+                    postCard.className = 'post-card';
+                    postCard.dataset.id = post.id;
+                    const isLiked = post.likes && post.likes.includes(loggedInUser);
+                    const likeCount = post.likes ? post.likes.length : 0;
+                    const captionHTML = post.caption ? `<div class="post-caption"><strong>${post.user}</strong> ${post.caption}</div>` : '';
+                    let commentsHTML = '';
+                    if (post.comments && post.comments.length > 0) {
+                        post.comments.forEach(comment => {
+                           commentsHTML += `<div class="comment"><strong>${comment.user}:</strong> ${comment.text}</div>`;
+                        });
+                    }
+                    postCard.innerHTML = `
+                        <div class="post-header">
+                            <div class="profile-icon">${post.user.charAt(0).toUpperCase()}</div>
+                            <span class="username-display">${post.user}</span>
+                        </div>
+                        <div class="post-image">
+                            <img src="${post.imageUrl}" alt="Imagem da publicação">
+                        </div>
+                        ${captionHTML}
+                        <div class="post-actions">
+                            <span class="icon like-btn ${isLiked ? 'liked' : ''}">&#10084;</span>
+                            <span class="icon comment-btn">&#128172;</span>
+                        </div>
+                        <div class="post-stats">
+                            <span>${likeCount} gostos</span>
+                        </div>
+                        <div class="post-comments">${commentsHTML}</div>
+                    `;
+                    postsContainer.appendChild(postCard);
+                });
+            }
+
+            postsContainer.addEventListener('click', function(e) {
+                const posts = JSON.parse(localStorage.getItem('posts') || '[]');
+                const card = e.target.closest('.post-card');
+                if (!card) return;
+                const postId = Number(card.dataset.id);
+                const postIndex = posts.findIndex(p => p.id === postId);
+                if (postIndex === -1) return;
+                if (e.target.classList.contains('like-btn')) {
+                    const likeIndex = posts[postIndex].likes.indexOf(loggedInUser);
+                    if (likeIndex === -1) {
+                        posts[postIndex].likes.push(loggedInUser);
+                    } else {
+                        posts[postIndex].likes.splice(likeIndex, 1);
+                    }
+                }
+                if (e.target.classList.contains('comment-btn')) {
+                    const commentText = prompt("Escreva o seu comentário:");
+                    if (commentText) {
+                        posts[postIndex].comments.push({ user: loggedInUser, text: commentText });
+                    }
+                }
+                localStorage.setItem('posts', JSON.stringify(posts));
+                renderPosts();
+            });
+            renderPosts();
+        });
+    </script>
+</body>
+</html>
