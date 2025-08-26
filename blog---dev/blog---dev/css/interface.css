@@ -1,0 +1,207 @@
+/* ... (todo o seu css de :root, body, header, etc. continua igual) ... */
+:root {
+    --cor-fundo: #1a1a1d;
+    --cor-cartao: rgba(44, 44, 52, 0.75);
+    --cor-destaque: #4a90e2;
+    --cor-sucesso: #2a8a5f;
+    --cor-perigo: #c73848;
+    --cor-texto-principal: #f0f2f5;
+    --cor-texto-secundario: #b0b3b8;
+    --cor-borda: rgba(255, 255, 255, 0.1);
+}
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto-principal);
+}
+
+header {
+    background: var(--cor-cartao);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--cor-borda);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.profile-info { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+}
+
+/* CORREÇÃO: Estilo para a tag IMG da foto de perfil */
+.profile-icon {
+    width: 40px; 
+    height: 40px; 
+    border-radius: 50%; 
+    object-fit: cover; /* Garante que a imagem não se distorça */
+    border: 2px solid var(--cor-borda);
+}
+
+/* ... (resto do seu css para username-display, menu-icon, side-menu, etc. continua igual) ... */
+.username-display { 
+    font-weight: bold; 
+}
+
+.menu-icon { 
+    font-size: 28px; 
+    cursor: pointer; 
+    padding: 5px; 
+}
+.side-menu {
+    position: fixed; top: 0; right: -280px;
+    width: 250px; height: 100%;
+    background: #1c1c20;
+    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+    transition: right 0.3s ease-in-out;
+    z-index: 200;
+    display: flex; flex-direction: column;
+    padding: 20px;
+}
+.side-menu.active { right: 0; }
+.side-menu a {
+    color: var(--cor-texto-principal); text-decoration: none;
+    padding: 15px 10px; font-size: 1.1em;
+    border-radius: 8px; transition: background-color 0.2s;
+}
+.side-menu a:hover { background-color: var(--cor-destaque); }
+#logout-btn {
+    background-color: var(--cor-perigo);
+    color: white; text-align: center;
+    margin-top: auto; margin-bottom: 25px;
+}
+.overlay {
+    display: none; position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5); z-index: 199;
+}
+.overlay.active { display: block; }
+
+main { padding: 20px; max-width: 600px; margin: 0 auto; }
+
+.add-post-form {
+    background-color: var(--cor-cartao);
+    padding: 25px; border-radius: 12px;
+    border: 1px solid var(--cor-borda);
+    margin-bottom: 30px;
+}
+.add-post-form h2 {
+    margin-top: 0; font-size: 1.3em;
+    color: var(--cor-destaque); text-align: center;
+    margin-bottom: 20px;
+}
+.file-input-wrapper {
+    position: relative; border: 2px dashed var(--cor-borda);
+    border-radius: 8px; padding: 30px;
+    text-align: center; cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.file-input-wrapper:hover {
+    background-color: rgba(74, 144, 226, 0.1);
+    border-color: var(--cor-destaque);
+}
+.file-input-wrapper input[type="file"] {
+    position: absolute; top:0; left:0;
+    width:100%; height:100%;
+    opacity: 0; cursor: pointer;
+}
+.file-input-label { color: var(--cor-texto-secundario); }
+#image-preview {
+    display: none; max-width: 100%; max-height: 200px;
+    border-radius: 8px; margin-top: 15px;
+    margin-left: auto; margin-right: auto;
+}
+#post-caption {
+    width: 100%; background-color: var(--cor-fundo);
+    border: 1px solid var(--cor-borda); border-radius: 8px;
+    color: var(--cor-texto-principal);
+    font-family: inherit; font-size: 1em;
+    padding: 12px; margin-top: 20px;
+    resize: vertical; min-height: 60px;
+    box-sizing: border-box;
+}
+#post-caption:focus { outline: none; border-color: var(--cor-destaque); }
+
+.btn-primary {
+    background: linear-gradient(90deg, var(--cor-destaque) 0%, #3a7bc8 100%);
+    color: white; padding: 12px 15px; border: none;
+    border-radius: 8px; cursor: pointer; width: 100%;
+    font-size: 1em; font-weight: bold; margin-top: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.2);
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.3);
+}
+
+.post-card {
+    background-color: var(--cor-cartao);
+    border: 1px solid var(--cor-borda);
+    border-radius: 12px; margin-bottom: 20px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+.post-header { display: flex; align-items: center; padding: 12px 15px; gap: 10px; }
+/* CORREÇÃO: Diminui o ícone do perfil no cabeçalho do post */
+.post-header .profile-icon { 
+    width: 32px; 
+    height: 32px;
+    border-width: 1px;
+}
+.post-header .username-display { font-size: 0.9em; }
+.post-image img {
+    width: 100%; height: auto; max-height: 70vh;
+    object-fit: cover; display: block;
+}
+.post-caption { padding: 12px 15px; }
+.post-caption strong { color: var(--cor-destaque); }
+.post-actions { padding: 8px 15px; display: flex; align-items: center; gap: 20px; font-size: 24px; }
+.post-actions .icon { cursor: pointer; transition: transform 0.2s; }
+.post-actions .icon:hover { transform: scale(1.15); }
+.post-actions .icon.liked { color: var(--cor-destaque); }
+.post-stats { padding: 0 15px 10px; font-size: 0.9em; color: var(--cor-texto-secundario); }
+.post-comments { padding: 0 15px 15px; font-size: 0.9em; }
+
+/* CORREÇÃO: Estilos para os comentários */
+.comment { 
+    margin-top: 8px; 
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.comment strong { color: var(--cor-destaque); }
+.comment-author-pic {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+/* ... (resto do css para toasts continua igual) ... */
+#toast-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1000; }
+.toast {
+    display: flex; align-items: center; padding: 12px 20px;
+    border-radius: 50px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    opacity: 0; transform: translateX(100%);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    max-width: 350px; font-size: 0.95rem; font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.toast.show { opacity: 1; transform: translateX(0); }
+.toast .toast-icon { margin-right: 10px; font-size: 1.2em; }
+.toast.error { background: var(--cor-perigo); color: #fce8ec; }
+.toast.success { background: var(--cor-sucesso); color: #e4f4ed; }

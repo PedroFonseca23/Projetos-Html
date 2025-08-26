@@ -1,0 +1,172 @@
+/* --- LAYOUT PRINCIPAL DO PERFIL --- */
+.profile-main {
+    max-width: 900px;
+}
+
+/* --- CABEÇALHO DO PERFIL (Estilo unificado) --- */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 30px;
+    margin-bottom: 30px;
+    background-color: var(--cor-cartao);
+    border: 1px solid var(--cor-borda);
+    border-radius: 16px;
+    animation: fadeIn 0.5s ease-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.profile-picture {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--cor-fundo);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.profile-details {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.profile-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap; /* Permite que o botão quebre a linha em telas pequenas */
+    gap: 20px;
+    margin-bottom: 15px;
+}
+.profile-title h2 {
+    margin: 0;
+    font-size: 2em;
+    color: var(--cor-texto-principal);
+}
+
+/* Botão "Editar Perfil" */
+.btn-secondary {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--cor-texto-secundario);
+    border: 1px solid var(--cor-borda);
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+.btn-secondary:hover {
+    background-color: var(--cor-borda);
+    color: var(--cor-texto-principal);
+}
+
+.profile-stats {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 15px;
+    font-size: 1em;
+    color: var(--cor-texto-secundario);
+}
+.profile-stats strong {
+    color: var(--cor-texto-principal);
+}
+
+.profile-bio {
+    font-size: 0.95em;
+    color: var(--cor-texto-principal);
+    line-height: 1.5;
+}
+
+
+/* --- ABAS DE NAVEGAÇÃO --- */
+.profile-tabs {
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid var(--cor-borda);
+    margin-bottom: 30px;
+}
+.tab {
+    padding: 15px 20px;
+    cursor: pointer;
+    color: var(--cor-texto-secundario);
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px; /* Alinha a borda com a linha principal */
+    transition: color 0.2s, border-color 0.2s;
+    font-weight: bold;
+}
+.tab:hover { color: var(--cor-texto-principal); }
+.tab.active {
+    color: var(--cor-destaque);
+    border-bottom-color: var(--cor-destaque);
+}
+
+
+/* --- GRELHA DE PUBLICAÇÕES --- */
+.posts-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+.post-grid-item {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 12px;
+    cursor: pointer;
+    background-color: var(--cor-cartao);
+}
+.post-grid-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+}
+.post-grid-overlay {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.6); color: white;
+    display: flex; justify-content: center; align-items: center;
+    text-align: center; padding: 10px;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.post-grid-item:hover img {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+.post-grid-item:hover .post-grid-overlay {
+    opacity: 1;
+}
+
+
+/* --- MODAL DE EDIÇÃO --- */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 999; justify-content: center; align-items: center; }
+.modal-overlay.active { display: flex; }
+.modal { background: #2a2a2e; padding: 25px; border-radius: 16px; width: 100%; max-width: 450px; border: 1px solid var(--cor-borda); animation: modal-pop 0.3s ease-out; }
+@keyframes modal-pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--cor-borda); padding-bottom: 10px; }
+.modal-header h2 { margin: 0; color: var(--cor-destaque); }
+.close-modal { font-size: 1.8em; font-weight: bold; cursor: pointer; color: var(--cor-texto-secundario); }
+
+/* Estilos para os campos do formulário no modal */
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: var(--cor-texto-secundario); }
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--cor-borda);
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto-principal);
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.form-group input:focus {
+    outline: none;
+    border-color: var(--cor-destaque);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.25);
+}

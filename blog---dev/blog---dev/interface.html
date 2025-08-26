@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BGP Feed</title>
+    <link rel="stylesheet" href="css/interface.css"> 
+</head>
+<body>
+
+    <header>
+        <div class="profile-info">
+            <img src="" alt="Foto de Perfil" class="profile-icon" id="profile-picture-header">
+            <span class="username-display" id="username"></span>
+        </div>
+        <div class="menu-icon" id="menu-btn">&#9776;</div>
+    </header>
+    
+    <div class="overlay" id="overlay"></div>
+    <nav class="side-menu" id="side-menu">
+        <a href="perfil.html">Meu Perfil</a>
+        <a href="#" id="logout-btn">Terminar Sessão</a>
+    </nav>
+
+    <main>
+        <div class="add-post-form">
+             <h2>Criar Publicação</h2>
+            <form id="newPostForm">
+                <div class="file-input-wrapper">
+                    <span class="file-input-label">Clique para selecionar uma imagem</span>
+                    <input type="file" id="imageFile" accept="image/*" required>
+                </div>
+                <img id="image-preview" src="#" alt="Pré-visualização da imagem">
+                <textarea id="post-caption" placeholder="Escreva uma legenda..."></textarea>
+                <button type="submit" class="btn-primary">Publicar</button> 
+            </form>
+        </div>
+        <div id="posts-container"></div>
+    </main>
+
+    <script src="js/state.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/interface.js"></script>
+
+</body>
+</html>

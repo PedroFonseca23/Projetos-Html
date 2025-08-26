@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Control - Bem-vindo</title>
+    <link rel="stylesheet" href="css/css_login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <div class="logo">
+        <h2>BGP</h2>
+    </div>
+
+    <div id="login-container">
+        <h1>Bem-vindo de volta!</h1>
+        <hr>
+        <form id="loginForm">
+            <label for="usuario">Utilizador:</label>
+            <input type="text" id="usuario" name="usuario" required autocomplete="username">
+
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required autocomplete="current-password">
+            
+            <button type="submit">Entrar</button>
+        </form>
+        <p class="switch-form-link">
+            Não tem cadastro? <a href="#" id="show-cadastro">Registe-se aqui!</a>
+        </p>
+    </div>
+
+    <div id="cadastro-container" style="display:none;">
+        <h1>Cadastre-se!</h1>
+        <hr>
+        <form id="cadastroForm">
+            <label for="cadUsuario">Utilizador:</label>
+            <input type="text" id="cadUsuario" name="cadUsuario" required>
+
+            <label for="cadCpf">CPF:</label>
+            <input type="text" id="cadCpf" name="cadCpf" required placeholder="000.000.000-00">
+
+            <label for="cadSenha">Senha:</label>
+            <input type="password" id="cadSenha" name="cadSenha" required autocomplete="new-password">
+
+            <button type="submit">Cadastrar</button>
+        </form>
+        <p class="switch-form-link">
+            Já tem cadastro? <a href="#" id="show-login">Aceda ao Login!</a>
+        </p>
+    </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/login.js"></script>
+
+</body>
+</html>

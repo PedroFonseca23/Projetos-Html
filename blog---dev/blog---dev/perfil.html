@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil</title>
+    <link rel="stylesheet" href="css/interface.css"> 
+    <link rel="stylesheet" href="css/perfil.css">
+</head>
+<body>
+    <header>
+        <div class="profile-info">
+            <img src="" alt="Foto de Perfil" class="profile-icon" id="profile-picture-header">
+            <span class="username-display" id="username-header"></span>
+        </div>
+        <div class="menu-icon" id="menu-btn">&#9776;</div>
+    </header>
+    <div class="overlay" id="overlay"></div>
+    <nav class="side-menu" id="side-menu">
+        <a href="interface.html">Feed Principal</a>
+        <a href="#" id="logout-btn">Terminar Sessão</a>
+    </nav>
+
+    <main class="profile-main">
+        <div class="profile-header">
+            <img src="" alt="Foto de Perfil" class="profile-picture" id="profile-picture-profile">
+            <div class="profile-details">
+                <div class="profile-title">
+                    <h2 id="username-profile"></h2>
+                    <button id="edit-profile-btn" class="btn-secondary">Editar Perfil</button>
+                </div>
+                <div class="profile-stats">
+                    <div><strong><span id="post-count">0</span></strong> publicações</div>
+                </div>
+                <div class="profile-bio">
+                    <p>A explorar o mundo digital. Bem-vindo ao meu espaço!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-tabs">
+            <div class="tab active">
+                <span>PUBLICAÇÕES</span>
+            </div>
+        </div>
+        
+        <div class="posts-grid-container" id="user-posts-container"></div>
+    </main>
+    
+    <div class="modal-overlay" id="edit-modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Editar Perfil</h2>
+                <span class="close-modal" id="close-modal-btn">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="form-group">
+                        <label for="editUsuario">Nome de Utilizador:</label>
+                        <input type="text" id="editUsuario" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editFoto">URL da Foto de Perfil:</label>
+                        <input type="text" id="editFoto">
+                    <button type="submit" class="btn-primary">Salvar Alterações</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast-container"></div>
+    
+    <script src="js/state.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/perfil.js"></script>
+</body>
+</html>

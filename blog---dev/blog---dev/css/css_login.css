@@ -1,0 +1,350 @@
+/* CSS for the login modal and page styling */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f7fa;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+#adminModal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #f9f9f9 70%, #e3f0ff 100%);
+    border-radius: 18px;
+    border: 2.5px solid #007bff;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+    padding: 38px 36px 28px 36px;
+    z-index: 1200;
+    min-width: 340px;
+    max-width: 90vw;
+    text-align: center;
+    animation: modalFadeIn 0.4s;
+    transition: opacity 0.35s, transform 0.35s;
+    opacity: 1;
+}
+
+#adminModal.fechar-anim {
+    opacity: 0;
+    transform: translate(-50%, -60%) scale(0.95);
+    pointer-events: none;
+}
+
+#adminModalOverlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.25);
+    z-index: 1100;
+    transition: opacity 0.35s;
+}
+
+#adminModal h3 {
+    margin-top: 0;
+    color: #007bff;
+    font-size: 1.5em;
+    letter-spacing: 1px;
+    margin-bottom: 18px;
+}
+
+#adminModal button {
+    margin: 10px 6px 0 6px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+    color: #fff;
+    font-size: 1.08em;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,123,255,0.08);
+    transition: background 0.2s, transform 0.15s;
+}
+
+#adminModal button:hover {
+    background: linear-gradient(90deg, #0056b3 60%, #003e80 100%);
+    transform: scale(1.06);
+}
+
+#codigoGerado {
+    font-weight: bold;
+    margin-top: 18px;
+    color: #1a237e;
+    letter-spacing: 2px;
+    font-size: 1.18em;
+    background: #e3f0ff;
+    border-radius: 6px;
+    padding: 10px 0;
+    box-shadow: 0 1px 4px rgba(0,123,255,0.07);
+    font-family: 'Fira Mono', 'Consolas', 'Courier New', monospace;
+    word-spacing: 4px;
+    letter-spacing: 4px;
+    font-variant-ligatures: none;
+}
+
+#closeModal {
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    font-size: 1.6em;
+    color: #007bff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.2s, transform 0.2s;
+    user-select: none;
+}
+#closeModal:hover {
+    color: #003e80;
+    transform: scale(1.2) rotate(12deg);
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: translate(-50%, -60%) scale(0.95);}
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1);}
+}
+
+/* CSS for the login and registration forms */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #1c213b radial-gradient(white 0.5px, transparent 0.5px);
+    background-size: 35px 35px;
+    color: #f0f6fc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.container {
+    background: rgba(36, 45, 74, 0.85);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 2rem 2.2rem; /* Padding interno diminuído */
+    border-radius: 50px 12px;
+    width: 100%;
+    max-width: 360px; /* Largura máxima diminuída */
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Espaçamento do logo diminuído */
+    margin-bottom: 1.2rem;
+}
+
+.logo h2, h1 {
+    margin: 0;
+    font-weight: 600; /* Peso da fonte ajustado */
+}
+
+h1 { font-size: 1.5rem; margin-bottom: 5px; } /* Tamanho do título diminuído */
+.logo h2 { font-size: 1.6rem; } /* Tamanho do logo diminuído */
+
+hr {
+    border: none;
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+    width: 50px;
+    margin: 0 auto 1.5rem auto; /* Margem diminuída */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Espaçamento entre os campos diminuído */
+    text-align: left;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 0.7rem; /* Padding dos campos diminuído */
+    background-color: #1c213b;
+    border: 1px solid #4a5a9b;
+    border-radius: 8px;
+    color: #f0f6fc;
+    font-size: 0.95rem; /* Tamanho da fonte diminuído */
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2);
+}
+
+button[type="submit"] {
+    padding: 0.7rem; /* Padding do botão diminuído */
+    background-color: #4a5a9b;
+    border: 1px solid rgba(240, 246, 252, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font: 600 0.95rem 'Montserrat', sans-serif; /* Fonte do botão diminuída */
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+button[type="submit"]:hover { background-color: #5c70c4; }
+button[type="submit"]:active { transform: scale(0.98); }
+
+.switch-form-link {
+    margin-top: 1.2rem; /* Margem diminuída */
+    font-size: 0.9rem; /* Tamanho da fonte diminuído */
+}
+
+.switch-form-link a {
+    color: #8cb4ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.switch-form-link a:hover { text-decoration: underline; }
+
+
+/* Link para trocar de formulário */
+.switch-form-link {
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.switch-form-link a {
+    color: #8cb4ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.switch-form-link a:hover {
+    text-decoration: underline;
+}
+/* ... (todo o seu CSS anterior continua igual até o final) ... */
+
+.switch-form-link a:hover { text-decoration: underline; }
+
+/* --- NOVOS ESTILOS PARA MENSAGENS --- */
+.error-message, .success-message {
+    font-size: 0.9rem;
+    margin: 0 auto 1rem auto; /* Centraliza e adiciona margem */
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    text-align: left; /* Alinha o texto à esquerda, ao lado do ícone */
+    display: none; /* Mantém oculto por padrão */
+    animation: fadeInDown 0.4s ease-out forwards;
+    display: flex; /* Permite alinhar o ícone com o texto */
+    align-items: center;
+    gap: 10px; /* Espaço entre o ícone e o texto */
+}
+
+/* --- ESTILO DAS NOTIFICAÇÕES "TOAST" --- */
+
+/* Contentor que posiciona as notificações no canto da tela */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+}
+
+/* Estilo base de cada notificação */
+.toast {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    border-radius: 50px; /* Deixa as pontas totalmente circulares */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    opacity: 0; /* Começa invisível */
+    transform: translateX(100%); /* Começa fora da tela */
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Animação de entrada e saída */
+    max-width: 350px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Estado visível da notificação */
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Ícone dentro da notificação */
+.toast .toast-icon {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+/* Estilo para notificação de erro */
+.toast.error {
+    background: #c73848; /* Vermelho escuro */
+    color: #fce8ec;
+}
+
+/* Estilo para notificação de sucesso */
+.toast.success {
+    background: #2a8a5f; /* Verde escuro */
+    color: #e4f4ed;
+}
+/* Estilos para o botão de administrador */
+#adminBtn {
+    display: none; /* Inicialmente oculto */
+    margin-top: 1rem;
+    padding: 0.6rem;
+    background-color: #ff4757;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+#adminBtn:hover { background-color: #ff6b81; }
+#adminBtn:active { transform: scale(0.98); }
+/* Estilos para o botão de login como administrador */
+#loginAdminBtn {
+    display: none; /* Inicialmente oculto */
+    margin-top: 1rem;
+    padding: 0.6rem;
+    background-color: #ffa502;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+#loginAdminBtn:hover { background-color: #ffb74d; }
+#loginAdminBtn:active { transform: scale(0.98); }
